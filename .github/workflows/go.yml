@@ -15,7 +15,9 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-22.04
-    container: golang:1.21
+    container:
+      image: golang:1.21
+      options: --user 1001
     services:
       # Label used to access the service container
       postgres:
