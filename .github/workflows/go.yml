@@ -45,6 +45,12 @@ jobs:
       with:
         go-version: '1.21'
 
+    - name: Run migrations
+      run: |
+           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
+           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
+           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
+
     - name: Build
       run: go build -v ./...
 
@@ -52,10 +58,4 @@ jobs:
       env:
         HOST: localhost
         PGPASSWORD: postgres
-      run: |
-          apt update && apt install sudo
-          sudo apt-get update && apt-get install -yq postgresql postgresql-contrib
-          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
-          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
-          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
-          go test -v ./...
+      run: go test -v ./...
