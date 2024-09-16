@@ -28,10 +28,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_HOST_AUTH_METHOD: trust
-        run: |
-          psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
-          psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
-          psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -53,4 +49,9 @@ jobs:
     - name: Test
       env:
         HOST: localhost
-      run: go test -v ./...
+        PGPASSWORD: postgres
+      run: |
+          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
+          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
+          psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
+          go test -v ./...
