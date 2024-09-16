@@ -47,13 +47,13 @@ jobs:
 
     - name: Run migrations
       env:
-        HOST: localhost
+        HOST: postgres
         PGPASSWORD: postgres
       run: |
            apt-get update && apt-get install -yq postgresql postgresql-contrib
-           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
-           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
-           psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
 
     - name: Build
       run: go build -v ./...
