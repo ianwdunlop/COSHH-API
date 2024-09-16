@@ -49,6 +49,8 @@ jobs:
       env:
         HOST: postgres
         PGPASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: coshh
       run: |
            apt-get update && apt-get install -yq postgresql postgresql-contrib
            psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
