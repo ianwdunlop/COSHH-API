@@ -50,7 +50,7 @@ jobs:
         HOST: localhost
         PGPASSWORD: postgres
       run: |
-           sudo apt-get update && apt-get install -yq postgresql postgresql-contrib
+           apt-get update && apt-get install -yq postgresql postgresql-contrib
            psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
            psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
            psql -h "localhost" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
