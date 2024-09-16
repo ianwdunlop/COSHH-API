@@ -109,7 +109,7 @@ func TestMain(m *testing.M) {
 	// wait for server to start
 	time.Sleep(time.Second * 2)
 
-	InsertTestChemicals()
+	// InsertTestChemicals()
 
 	status := m.Run()
 	os.Exit(status)
@@ -192,11 +192,13 @@ func TestPutChemical(t *testing.T) {
 
 	var responseChemical chemical.Chemical
 	err = json.Unmarshal(bodyBytes, &responseChemical)
+	assert.Nil(t, err, "Failed to unmarshal into Chemical")
+
 	assert.Equal(t, putChem, responseChemical)
 }
 
 func TestGetCupboards(t *testing.T) {
-	expectedResponse := []string{"3", "4", "closet"}
+	expectedResponse := []string{"", "Cupboard 1", "Cupboard 12", "Cupboard 1a", "Cupboard 1b", "Cupboard 2", "Cupboard 3", "Cupboard 4", "Cupboard 7", "closet"}
 	req, err := http.NewRequest(http.MethodGet, "http://localhost:8081/cupboards", nil)
 	assert.Nil(t, err, "Failed to build GET request")
 
@@ -208,17 +210,17 @@ func TestGetCupboards(t *testing.T) {
 
 	var responseValues []string
 	err = json.Unmarshal(bodyBytes, &responseValues)
-	assert.Nil(t, err, "Failed to unmarshal into string")
+	assert.Nil(t, err, "Failed to unmarshal into string array")
 
 	assert.Equal(t, expectedResponse, responseValues)
 
 }
 
 func TestGetCupboardsForLab(t *testing.T) {
-	expectedResponse := []string{"3", "4"}
+	expectedResponse := []string{"Cupboard 1", "Cupboard 1a"}
 	req, err := http.NewRequest(http.MethodGet, "http://localhost:8081/cupboards", nil)
 	q := req.URL.Query()
-	q.Add("lab", "Test Lab")
+	q.Add("lab", "Lab 2")
 	req.URL.RawQuery = q.Encode()
 	assert.Nil(t, err, "Failed to build GET request")
 
@@ -230,7 +232,7 @@ func TestGetCupboardsForLab(t *testing.T) {
 
 	var responseValues []string
 	err = json.Unmarshal(bodyBytes, &responseValues)
-	assert.Nil(t, err, "Failed to unmarshal into string")
+	assert.Nil(t, err, "Failed to unmarshal into string array")
 
 	assert.Equal(t, expectedResponse, responseValues)
 
@@ -253,5 +255,22 @@ func TestPutHazards(t *testing.T) {
 
 	var responseChemical chemical.Chemical
 	err = json.Unmarshal(bodyBytes, &responseChemical)
+	assert.Nil(t, err, "Failed to unmarshal into Chemical")
+
 	assert.Equal(t, putChem, responseChemical)
+}
+
+func TestGetUsers(t *testing.T) {
+	expectedResponse := []string{"User One", "User Two"}
+	req, err := http.NewRequest(http.MethodGet, "http://localhost:8081/users", nil)
+	assert.Nil(t, err, "Failed to build GET request")
+	response, err := client.Do(req)
+	assert.Nil(t, err, "Failed to send GET request")
+	bodyBytes, err := io.ReadAll(response.Body)
+	assert.Nil(t, err, "Failed to read message body")
+	var responseUserList []string
+	err = json.Unmarshal(bodyBytes, &responseUserList)
+	assert.Nil(t, err, "Failed to unmarshal into string array")
+
+	assert.Equal(t, expectedResponse, responseUserList)
 }

@@ -14,6 +14,7 @@
 package server
 
 import (
+	"bufio"
 	"context"
 	"encoding/csv"
 	"log"
@@ -35,8 +36,10 @@ type Config struct {
 	LabsCSV       string `env:"LABS_CSV,default=/mnt/labs.csv"`
 	Auth0Audience string `env:"AUTH0_AUDIENCE,required"`
 	Auth0Domain   string `env:"AUTH0_DOMAIN,required"`
+	LDAPEnabled   bool   `env:"LDAP_ENABLED, default=false"`
 	LDAPUsername  string `env:"LDAP_USERNAME, default=coshhbind@medcat.local"`
 	LDAPPassword  string `env:"LDAP_PASSWORD"`
+	UsernameFile  string `env:"USERNAME_FILE,default=/mnt/usernames.txt"`
 }
 
 type (
@@ -105,20 +108,20 @@ func getCupboards(c *gin.Context) {
 	c.JSON(http.StatusOK, chemicals)
 }
 
-func updateChemical(c *gin.Context)  {
+func updateChemical(c *gin.Context) {
 
 	var chemical chemical.Chemical
-		if err := c.BindJSON(&chemical); err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	if err := c.BindJSON(&chemical); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-		if err := db.UpdateChemical(chemical); err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	if err := db.UpdateChemical(chemical); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-		c.JSON(http.StatusOK, chemical)
+	c.JSON(http.StatusOK, chemical)
 
 }
 
@@ -180,12 +183,29 @@ func getLabs(c *gin.Context) {
 	c.JSON(http.StatusOK, labs)
 }
 
+// Return list of users from LDAP if enabled or from file containing usernames
 func getUsers(c *gin.Context) {
-	if usersList, err := users.GetUsers(config.LDAPUsername, config.LDAPPassword); err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	if config.LDAPEnabled {
+		if usersList, err := users.GetUsers(config.LDAPUsername, config.LDAPPassword); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		} else {
+			c.JSON(http.StatusOK, usersList)
+		}
 	} else {
-		c.JSON(http.StatusOK, usersList)
+		file, err := os.Open(config.UsernameFile)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer file.Close()
+
+		var userList []string
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			userList = append(userList, scanner.Text())
+		}
+		c.JSON(http.StatusOK, userList)
 	}
 }
 

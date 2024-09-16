@@ -33,7 +33,7 @@ var config Config
 
 type Config struct {
 	Port     int    `env:"PORT,default=5432"`
-	User     string `env:"USER,default=postgres"`
+	User     string `env:"DBUSER,default=postgres"`
 	Password string `env:"PASSWORD,default=postgres"`
 	DbName   string `env:"DBNAME,default=informatics"`
 	Host     string `env:"HOST,default=localhost"`
