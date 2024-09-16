@@ -58,7 +58,9 @@ jobs:
            psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
 
     - name: Build
-      run: go build -v ./...
+      run: |
+           git config --global --add safe.directory /__w/COSHH-API/COSHH-API
+           go build -v ./...
 
     - name: Test
       run: go test -v ./...
