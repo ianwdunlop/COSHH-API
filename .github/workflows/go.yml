@@ -65,5 +65,5 @@ jobs:
     - name: Test
       env:
         HOST: postgres
-        USERNAME_FILE: ${GITHUB_WORKSPACE}/testdata/usernames.txt
+        # USERNAME_FILE: ${GITHUB_WORKSPACE}/testdata/usernames.txt
       run: go test -v ./...
