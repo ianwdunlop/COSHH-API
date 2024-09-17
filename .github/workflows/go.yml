@@ -1,0 +1,71 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: 
+      - main
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  container-job:
+    runs-on: ubuntu-22.04
+    container:
+      image: golang:1.21
+      options: --user root
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          HOST: postgres
+          POSTGRES_DB: coshh
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Run migrations
+      env:
+        HOST: postgres
+        PGPASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: coshh
+      run: |
+           apt-get update && apt-get install -yq postgresql postgresql-contrib
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
+           psql -h "$HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
+
+    - name: Build
+      run: |
+           git config --global --add safe.directory /__w/COSHH-API/COSHH-API
+           go build -v ./...
+
+    - name: Test
+      env:
+        HOST: postgres
+        AUTH0_DOMAIN: "auth.domain.something.for.testing"
+        AUTH0_AUDIENCE: "auth.audience.something.for.testing"
+        USERNAME_FILE: ${{github.workspace}}/testdata/usernames.txt
+      run: go test -v ./...

@@ -22,6 +22,8 @@ test-lint-build-api:
   before_script:
     - apt-get update && apt-get install -yq postgresql postgresql-contrib
     - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-001.sql
+    - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-002.sql
+    - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f ./scripts/init-003.sql
   script:
     - go vet ./...
     - go test -v ./... -p 1
