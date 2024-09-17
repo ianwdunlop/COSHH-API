@@ -17,7 +17,6 @@ import (
 	"bufio"
 	"context"
 	"encoding/csv"
-	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -38,7 +37,7 @@ type Config struct {
 	Auth0Audience string `env:"AUTH0_AUDIENCE,required"`
 	Auth0Domain   string `env:"AUTH0_DOMAIN,required"`
 	LDAPEnabled   bool   `env:"LDAP_ENABLED, default=false"`
-	LDAPUsername  string `env:"LDAP_USERNAME, default=coshhbind@medcat.local"`
+	LDAPUsername  string `env:"LDAP_USERNAME"`
 	LDAPPassword  string `env:"LDAP_PASSWORD"`
 	UsernameFile  string `env:"USERNAME_FILE,default=/mnt/usernames.txt"`
 }
@@ -55,10 +54,6 @@ func Start(port string, validator jwtValidator) error {
 		log.Println("Server start env vars unset or incorrect, using default config")
 	} else {
 		log.Println("Server using config from env vars")
-	}
-	log.Printf("File path is: %s", config.UsernameFile)
-	if _, err := os.Stat(config.UsernameFile); errors.Is(err, os.ErrNotExist) {
-		log.Printf("Where is that pesky file? %s", config.UsernameFile)
 	}
 	r := gin.Default()
 	r.Use(corsMiddleware())

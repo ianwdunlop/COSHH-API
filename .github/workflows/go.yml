@@ -65,7 +65,7 @@ jobs:
     - name: Test
       env:
         HOST: postgres
-        AUTH0_DOMAIN: "mdcatapult.eu.auth0.com"
-        AUTH0_AUDIENCE: "https://coshh-api-local.wopr.inf.mdc"
+        AUTH0_DOMAIN: "auth.domain.something.for.testing"
+        AUTH0_AUDIENCE: "auth.audience.something.for.testing"
         USERNAME_FILE: ${{github.workspace}}/testdata/usernames.txt
       run: go test -v ./...
