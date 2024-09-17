@@ -17,6 +17,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/csv"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -54,6 +55,7 @@ func Start(port string, validator jwtValidator) error {
 		log.Println("Server start env vars unset or incorrect, using default config")
 	} else {
 		log.Println("Server using config from env vars")
+	}
 	if _, err := os.Stat(config.UsernameFile); errors.Is(err, os.ErrNotExist) {
 		log.Println("Where is that pesky file?")
 	}
