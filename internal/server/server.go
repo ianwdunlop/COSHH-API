@@ -57,7 +57,7 @@ func Start(port string, validator jwtValidator) error {
 		log.Println("Server using config from env vars")
 	}
 	if _, err := os.Stat(config.UsernameFile); errors.Is(err, os.ErrNotExist) {
-		log.Println("Where is that pesky file?")
+		log.Println("Where is that pesky file? ", config.UsernameFile)
 	}
 	r := gin.Default()
 	r.Use(corsMiddleware())
