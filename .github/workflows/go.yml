@@ -65,4 +65,5 @@ jobs:
     - name: Test
       env:
         HOST: postgres
+        USERNAME_FILE: ./testdata/usernames.txt
       run: go test -v ./...
