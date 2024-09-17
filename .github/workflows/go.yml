@@ -63,7 +63,8 @@ jobs:
            go build -v ./...
 
     - name: Test
+      working-directory: ./app
       env:
         HOST: postgres
-        USERNAME_FILE: /__w/COSHH-API/COSHH-API/testdata/usernames.txt
+        USERNAME_FILE: ./app/testdata/usernames.txt
       run: go test -v ./...
