@@ -25,7 +25,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          HOST: localhost
+          HOST: postgres
           POSTGRES_DB: coshh
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -63,4 +63,6 @@ jobs:
            go build -v ./...
 
     - name: Test
+      env:
+        HOST: postgres
       run: go test -v ./...
