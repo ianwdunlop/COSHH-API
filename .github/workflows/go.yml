@@ -65,5 +65,5 @@ jobs:
     - name: Test
       env:
         HOST: postgres
-        USERNAME_FILE: ./testdata/usernames.txt
+        USERNAME_FILE: /__w/COSHH-API/COSHH-API/testdata/usernames.txt
       run: go test -v ./...
