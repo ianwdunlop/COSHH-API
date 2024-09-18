@@ -59,7 +59,7 @@ jobs:
 
     - name: Build
       run: |
-           git config --global --add safe.directory /__w/COSHH-API/COSHH-API
+          #  git config --global --add safe.directory /__w/COSHH-API/COSHH-API
            go build -v ./...
 
     - name: Test
