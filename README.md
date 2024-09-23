@@ -154,7 +154,7 @@ USERNAME_FILE=/home/me/code/coshh/COSHH-API/testdata/usernames.txt
 
 ### Using AWS Lambda
 
-The project contains a `template.json` which defines the routes and the params required to run the app. Use the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) to deploy it.  
+The project contains a `template.yaml` which defines the routes and the params required to run the app using AWS lambda. The lambda server version of the main method is within `lambda\main.go`. This is so we can still keep the original bare metal go version and build and run it within docker rather than always having to use lambda. Use the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) to deploy it.  
 To run locally start up the db using `docker compose up -d db` and then:
 ```bash
 make build
@@ -162,9 +162,11 @@ sam local start-api
 ```
 If you want to point it to a different db then copy `env.json_example` to `env.json` and change the `HOST` param to point to the db you require and run
 ```bash
-sam local start-api --env-vars env.json
+sam local start-api --env-vars env.json -p 8080
 ```
+Note that we added the `-p 8080` param to tell it start on `8080` rather than the default of `3000`.
 
+You can use Auth0 for authentication with lambda, it uses the exact same methods as before. Make sure you add `AUTH0_AUDIENCE` & `AUTH0_DOMAIN` to the env var json or within the config in the lambda service if deploying to the cloud. By default the `template.yaml` has some dummy values for the Auth0 params so out of the box any protected routes will not work.
 
 ### Licence
 
