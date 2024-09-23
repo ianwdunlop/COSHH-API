@@ -77,9 +77,6 @@ func Start(port string, validator jwtValidator) *gin.Engine {
 
 	r.GET("/users", getUsers)
 	return r
-	// ginLambda = ginadapter.New(r)
-	// lambda.Start(Handler)
-	// return r.Run(port)
 }
 
 func getChemicals(c *gin.Context) {

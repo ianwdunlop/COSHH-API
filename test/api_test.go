@@ -101,7 +101,7 @@ func TestMain(m *testing.M) {
 		log.Fatal("Failed to start DB", err)
 	}
 	go func() {
-		if err := server.Start(":8081", validator); err != nil {
+		if err := server.Start(":8081", validator).Run(":8081"); err != nil {
 			log.Fatal("Failed to start server", err)
 		}
 	}()

@@ -21,29 +21,49 @@ Resources:
         Variables:
           HOST: !Ref Host
       Events:
-        Chemicals:
+        GetChemicals:
           Type: Api
           Properties:
             Path: /chemicals
             Method: get
+        PostChemical:
+          Type: Api
+          Properties:
+            Path: /chemical
+            Method: post
+        PutChemical:
+          Type: Api
+          Properties:
+            Path: /chemical
+            Method: put
         MaxChemicalNumber:
           Type: Api
           Properties:
             Path: /chemical/maxchemicalnumber
             Method: get
-        Cupboards:
+        GetCupboards:
           Type: Api
           Properties:
             Path: /cupboards
             Method: get
-        Labs:
+        GetLabs:
           Type: Api
           Properties:
             Path: /labs
             Method: get
-        Chemical:
+        PutChemical:
           Type: Api
           Properties:
             Path: /chemical
             Method: put
+        PutHazards:
+          Type: Api
+          Properties:
+            Path: /hazards
+            Method: put
+        GetUsers:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: get
           
