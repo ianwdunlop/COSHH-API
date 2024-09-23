@@ -152,6 +152,20 @@ AUTH0_CLIENT_ID=45yhdfmlknm3jkl45n35j
 USERNAME_FILE=/home/me/code/coshh/COSHH-API/testdata/usernames.txt
 ```
 
+### Using AWS Lambda
+
+The project contains a `template.json` which defines the routes and the params required to run the app. Use the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) to deploy it.  
+To run locally start up the db using `docker compose up -d db` and then:
+```bash
+make build
+sam local start-api
+```
+If you want to point it to a different db then copy `env.json_example` to `env.json` and change the `HOST` param to point to the db you require and run
+```bash
+sam local start-api --env-vars env.json
+```
+
+
 ### Licence
 
 This project is licensed under the terms of the Apache 2 licence, which can be found in the repository as `LICENCE.txt`

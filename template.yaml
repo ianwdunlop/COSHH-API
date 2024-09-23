@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+
+Description:
+  coshh-app
+Parameters:
+  Host:
+    Type: String
+    Description: Database host
+    Default: host.docker.internal
+Resources:
+  Coshh:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: coshh
+      CodeUri: ./bin/coshh.zip
+      Runtime: go1.x
+      Timeout: 10
+      Environment:
+        Variables:
+          HOST: !Ref Host
+      Events:
+        Chemicals:
+          Type: Api
+          Properties:
+            Path: /chemicals
+            Method: get
+        MaxChemicalNumber:
+          Type: Api
+          Properties:
+            Path: /chemical/maxchemicalnumber
+            Method: get
+        Cupboards:
+          Type: Api
+          Properties:
+            Path: /cupboards
+            Method: get
+        Labs:
+          Type: Api
+          Properties:
+            Path: /labs
+            Method: get
+        Chemical:
+          Type: Api
+          Properties:
+            Path: /chemical
+            Method: put
+          

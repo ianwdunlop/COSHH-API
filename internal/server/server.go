@@ -46,7 +46,7 @@ type (
 	jwtValidator func(audience string, domain string) func(next http.Handler) http.Handler
 )
 
-func Start(port string, validator jwtValidator) error {
+func Start(port string, validator jwtValidator) *gin.Engine {
 
 	ctx := context.Background()
 
@@ -76,8 +76,10 @@ func Start(port string, validator jwtValidator) error {
 	r.GET("/protected", adapter.Wrap(validator(config.Auth0Audience, config.Auth0Domain)), protectedRoute)
 
 	r.GET("/users", getUsers)
-
-	return r.Run(port)
+	return r
+	// ginLambda = ginadapter.New(r)
+	// lambda.Start(Handler)
+	// return r.Run(port)
 }
 
 func getChemicals(c *gin.Context) {

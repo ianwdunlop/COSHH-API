@@ -14,20 +14,32 @@
 package main
 
 import (
+	"context"
+
 	"github.com/auth0-developer-hub/api_standard-library_golang_hello-world/pkg/middleware"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	_ "github.com/lib/pq"
 	"gitlab.mdcatapult.io/informatics/coshh/coshh-api/internal/db"
 	"gitlab.mdcatapult.io/informatics/coshh/coshh-api/internal/server"
+
 	"log"
 )
+
+var ginLambda *ginadapter.GinLambda
 
 func main() {
 
 	if err := db.Connect(); err != nil {
 		log.Fatal("Failed to start DB", err)
 	}
+	ginLambda = ginadapter.New(server.Start(":8080", middleware.ValidateJWT))
+	lambda.Start(Handler)
 
-	if err := server.Start(":8080", middleware.ValidateJWT); err != nil {
-		log.Fatal("Failed to start server", err)
-	}
+}
+
+func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// If no name is provided in the HTTP request body, throw an error
+	return ginLambda.ProxyWithContext(ctx, req)
 }
