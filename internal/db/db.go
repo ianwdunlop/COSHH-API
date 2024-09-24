@@ -39,6 +39,7 @@ type Config struct {
 	Host     string `env:"HOST,default=localhost"`
 	Schema   string `env:"SCHEMA,default=coshh"`
 	Retries  int    `env:"RETRIES,default=3"`
+	SSLMode  string `env:"SSLMODE,default=require"`
 }
 
 func Connect() error {
@@ -48,9 +49,9 @@ func Connect() error {
 	if err := envconfig.Process(ctx, &config); err != nil {
 		log.Println(" DB connect env vars unset or incorrect, using default config")
 	}
-	log.Printf("DB using env vars host=%s port=%d user=%s dbname=%s schema=%s retries=%d\n", config.Host, config.Port, config.User, config.DbName, config.Schema, config.Retries)
+	log.Printf("DB using env vars host=%s port=%d user=%s dbname=%s schema=%s retries=%d sslmode=%s\n", config.Host, config.Port, config.User, config.DbName, config.Schema, config.Retries, config.SSLMode)
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=require", config.Host, config.Port, config.User, config.Password, config.DbName)
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=%s", config.Host, config.Port, config.User, config.Password, config.DbName, config.SSLMode)
 
 	var err error
 	for i := 1; i < config.Retries; i++ {
