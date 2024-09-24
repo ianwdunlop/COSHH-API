@@ -166,7 +166,7 @@ sam local start-api --env-vars env.json -p 8080
 ```
 Note that we added the `-p 8080` param to tell it start on `8080` rather than the default of `3000`.
 
-You can use Auth0 for authentication with lambda, it uses the exact same methods as before. Make sure you add `AUTH0_AUDIENCE` & `AUTH0_DOMAIN` to the env var json or within the config in the lambda service if deploying to the cloud. By default the `template.yaml` has some dummy values for the Auth0 params so out of the box any protected routes will not work.
+You can use Auth0 for authentication with lambda, it uses the exact same methods as before. Make sure you add `AUTH0_AUDIENCE` & `AUTH0_DOMAIN` plus the values for your database `HOST`, `DBUSER` & `PASSWORD` to the env var json or within the config for the lambda service when deploying to the cloud. By default the `template.yaml` has some dummy values for the Auth0 params so out of the box any protected routes will not work.
 
 ### Licence
 

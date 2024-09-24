@@ -9,6 +9,14 @@ Parameters:
     Type: String
     Description: Database host
     Default: host.docker.internal
+  DBUser:
+    Type: String
+    Description: Database user
+    Default: postgres
+  DBPassword:
+    Type: String
+    Description: Database password
+    Default: postgres
   Auth0Audience:
     Type: String
     Description: Auth0 audience
@@ -28,6 +36,8 @@ Resources:
       Environment:
         Variables:
           HOST: !Ref Host
+          DBUSER: !Ref DBUser
+          PASSWORD: !Ref DBPassword
           AUTH0_AUDIENCE: !Ref Auth0Audience
           AUTH0_DOMAIN: !Ref Auth0Domain
       Events:

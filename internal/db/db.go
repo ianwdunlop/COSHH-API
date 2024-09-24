@@ -48,9 +48,9 @@ func Connect() error {
 	if err := envconfig.Process(ctx, &config); err != nil {
 		log.Println(" DB connect env vars unset or incorrect, using default config")
 	}
-	log.Printf("DB using env vars host=%s port=%d user=%s password=%s dbname=%s schema=%s retries=%d\n", config.Host, config.Port, config.User, config.Password, config.DbName, config.Schema, config.Retries)
+	log.Printf("DB using env vars host=%s port=%d user=%s dbname=%s schema=%s retries=%d\n", config.Host, config.Port, config.User, config.DbName, config.Schema, config.Retries)
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", config.Host, config.Port, config.User, config.Password, config.DbName)
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=require", config.Host, config.Port, config.User, config.Password, config.DbName)
 
 	var err error
 	for i := 1; i < config.Retries; i++ {
