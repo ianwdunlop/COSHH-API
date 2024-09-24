@@ -167,7 +167,7 @@ sam local start-api --env-vars env.json -p 8080
 Note that we added the `-p 8080` param to tell it start on `8080` rather than the default of `3000`.
 
 You can use Auth0 for authentication with lambda, it uses the exact same methods as before. Make sure you add `AUTH0_AUDIENCE` & `AUTH0_DOMAIN` plus the values for your database `HOST`, `DBUSER`, `PASSWORD` & `DBSSL` to the env var json or within the config for the lambda service when deploying to the cloud. By default the `template.yaml` has some dummy values for the Auth0 params so out of the box any protected routes will not work.
-The `DBSSL` env var is used to represent the `sslmode` param in the query string and can have various [values](https://pkg.go.dev/github.com/lib/pq). The default in the config is `require` but you may want to set it to `disable` if you are using a local database;
+The `DBSSL` env var is used to represent the `sslmode` param in the query string and can have various [values](https://pkg.go.dev/github.com/lib/pq). The default in the config is `disable` but you may want to set it to `require` if using a db in a cloud deployment.
 
 ### Licence
 

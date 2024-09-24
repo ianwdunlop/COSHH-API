@@ -39,7 +39,7 @@ type Config struct {
 	Host     string `env:"HOST,default=localhost"`
 	Schema   string `env:"SCHEMA,default=coshh"`
 	Retries  int    `env:"RETRIES,default=3"`
-	SSLMode  string `env:"SSLMODE,default=require"`
+	SSLMode  string `env:"SSLMODE,default=disable"`
 }
 
 func Connect() error {
