@@ -39,7 +39,7 @@ type Config struct {
 	LDAPEnabled   bool   `env:"LDAP_ENABLED, default=false"`
 	LDAPUsername  string `env:"LDAP_USERNAME"`
 	LDAPPassword  string `env:"LDAP_PASSWORD"`
-	UsernameFile  string `env:"USERNAME_FILE,default=/mnt/usernames.txt"`
+	UsernameFile  string `env:"USERNAME_FILE, default=/mnt/usernames.txt"`
 }
 
 type (

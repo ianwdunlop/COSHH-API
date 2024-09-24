@@ -33,10 +33,12 @@ export API_PORT=8080 \
 export DBUSER=postgres \
 export SCHEMA=coshh \
 export LABS_CSV=<path/to/assets/labs.csv> \
-export Auth0Audience="https://coshh-api-local.wopr.inf.mdc" \
-export Auth0Domain="mdcatapult.eu.auth0.com" \
-export LDAP_USER="coshhbind@medcat.local" \
-export LDAP_PASSWORD=<copy password from 1Password> \
+export USERNAME_FILE=<path/to/username-file> \
+export Auth0Audience="https://your-auth0-audience-url" \
+export Auth0Domain="your-auth0-domain.uk.auth0.com" \
+export LDAP_ENABLED=<true or false> \
+export LDAP_USER="your-ldap-user" \
+export LDAP_PASSWORD="your-ldap-password" \
 export LDAP_ENABLED=true
 ```
 
@@ -44,8 +46,7 @@ Note that in earlier versions of the code the db user was set using the env var 
 
 `Auth0Audience` is the identifier used in the Auth0 setup page for the particular API within the chosen `Auth0Domain`.
 
-LDAP username and password are used to get a list of users from the MDC LDAP server. The coshhbind@medcat.local user has
-been created specifically for this purpose and has readonly access. The password is stored in 1Password.
+LDAP username and password are used to get a list of users from an LDAP server. Or use a usernames file.
 
 Start the database (also seeds the db with initial data):
 ```bash
